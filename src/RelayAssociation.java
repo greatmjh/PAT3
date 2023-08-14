@@ -20,6 +20,10 @@ public class RelayAssociation {
 
     }
 
+    public RelayAssociation(int primaryKey, String addr, String name) {
+
+    }
+
     //Attempts to command the device to change its state to what is provided. Only updates the state value if successful
     public void setState(boolean state) {
 
@@ -53,7 +57,7 @@ public class RelayAssociation {
         return state;
     }
 
-    public boolean getDBSaveState() {
+    public boolean isSavedInDB() {
         return savedInDatabase;
     }
 
