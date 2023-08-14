@@ -1,5 +1,17 @@
 //Stores user configuration as a single unit
 public class UserConfigUnit {
+    //Default configuration value for limitByTemperature
+    public static final boolean DEFAULT_LIMIT_BY_TEMPERATURE = false;
+
+    //Default configuration value for maxBattTemp
+    public static final int DEFAULT_MAXIMUM_TEMPERATURE = 50;
+
+    //Default configuration value for limitByPercentage
+    public static final boolean DEFAULT_LIMIT_BY_PERCENTAGE = false;
+
+    //Default configuration value for maxBattPercentage
+    public static final int DEFAULT_MAXIMUM_PERCENTAGE = 80;
+
     //Whether or not the program should limit charging by battery temperature
     private boolean limitByTemperature;
 
