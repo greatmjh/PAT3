@@ -1,3 +1,5 @@
+package mel.battchargecontroller;
+
 //Stores user configuration as a single unit
 public class UserConfigUnit {
     //Default configuration value for limitByTemperature
