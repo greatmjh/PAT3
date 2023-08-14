@@ -1,3 +1,5 @@
+package mel.battchargecontroller;
+
 //This class is used to represent and communicate with associated smart relays
 public class RelayAssociation {
     //Stores the network address of the relay
@@ -30,7 +32,7 @@ public class RelayAssociation {
     }
 
     //Updates the databasePrimaryKey field and sets the savedInDatabase field to true.
-    //Intended to be used by the StorageDatabase class.
+    //Intended to be used by the mel.battchargecontroller.StorageDatabase class.
     public void setDBPrimaryKey(int databasePrimaryKey) {
         this.databasePrimaryKey = databasePrimaryKey;
         savedInDatabase = true;
