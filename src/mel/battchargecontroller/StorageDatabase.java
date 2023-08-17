@@ -45,7 +45,7 @@ public class StorageDatabase {
     //Loads the user’s configuration from the database
     public UserConfigUnit loadUserCfg() throws SQLException {
         //SQL query to be ran
-        String query = "SELECT FieldName, FieldValue" +
+        String query = "SELECT FieldName, FieldValue " +
                 "FROM tblConfig;";
 
         //Execute the query
@@ -124,7 +124,7 @@ public class StorageDatabase {
     //Loads all relay associations saved in the database
     public ArrayList<RelayAssociation> loadAllRelayAssociations() throws SQLException {
         //SQL query
-        String query = "SELECT RelayID, NetworkAddress, FriendlyName FROM tblRelays;";
+        String query = "SELECT RelayID, NetworkAddress, FriendlyName FROM tblRelay;";
         //Execute query and get results
         Statement stmt = jdbcConn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -150,7 +150,7 @@ public class StorageDatabase {
     //Loads a specific relay association saved in the database under the provided primary key
     public RelayAssociation loadRelayAssociation(int primaryKey) throws SQLException {
         //SQL query
-        String query = "RelayID, NetworkAddress, FriendlyName FROM tblRelays WHERE RelayID = ?;";
+        String query = "SELECT RelayID, NetworkAddress, FriendlyName FROM tblRelay WHERE RelayID = ?;";
         //Prepare statement
         PreparedStatement pstmt = jdbcConn.prepareStatement(query);
         //Set value
@@ -170,7 +170,7 @@ public class StorageDatabase {
     public void saveRelayAssociation(RelayAssociation ra) throws SQLException {
         if (ra.isSavedInDB()) { //Update the existing record
             //SQL query
-            String query = "UPDATE tblRelays SET NetworkAddress = ?, FriendlyName = ? WHERE RelayID = ?";
+            String query = "UPDATE tblRelay SET NetworkAddress = ?, FriendlyName = ? WHERE RelayID = ?";
             //Prepare statement
             PreparedStatement pstmt = jdbcConn.prepareStatement(query);
             //Set values
@@ -180,7 +180,7 @@ public class StorageDatabase {
             pstmt.execute();
         } else { //Create a new record
             //SQL query
-            String query = "INSERT INTO tblRelays(NetworkAddress, FriendlyName) VALUES (?, ?);";
+            String query = "INSERT INTO tblRelay(NetworkAddress, FriendlyName) VALUES (?, ?);";
             //Prepare statement
             PreparedStatement pstmt = jdbcConn.prepareStatement(query);
             //Set values
@@ -199,7 +199,7 @@ public class StorageDatabase {
     //Deletes the relay association with the specified primary key from the database
     public void deleteRelayAssociation(int primaryKey) throws SQLException {
         //SQL query
-        String query = "DELETE FROM tblRelays WHERE RelayID = ?";
+        String query = "DELETE FROM tblRelay WHERE RelayID = ?";
         //Prepare statement
         PreparedStatement pstmt = jdbcConn.prepareStatement(query);
         //Set primary key value
