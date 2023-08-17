@@ -19,11 +19,14 @@ public class RelayAssociation {
 
     //Creates a new relay association and commands relay to close the circuit.
     public RelayAssociation(String addr, String name) {
-
+        friendlyName = name;
+        networkAddress = addr;
     }
 
     public RelayAssociation(int primaryKey, String addr, String name) {
-
+        friendlyName = name;
+        networkAddress = addr;
+        databasePrimaryKey = primaryKey;
     }
 
     //Attempts to command the device to change its state to what is provided. Only updates the state value if successful
