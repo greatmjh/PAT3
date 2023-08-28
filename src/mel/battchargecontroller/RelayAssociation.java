@@ -1,5 +1,17 @@
 package mel.battchargecontroller;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.util.function.Consumer;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
+
 //This class is used to represent and communicate with associated smart relays
 public class RelayAssociation {
     //Stores the network address of the relay
@@ -31,7 +43,30 @@ public class RelayAssociation {
 
     //Attempts to command the device to change its state to what is provided. Only updates the state value if successful
     public void setState(boolean state) {
+        String sendState = state ? "on" : "off"; //Set the attribute which will be sent to the relay to either "on" or "off depending on what is required of us
+        String uri = String.format("http://%s/relay/0?turn=%s", networkAddress, sendState); //HTTP uri to command device with
 
+        //Send the network request
+        try {
+            //Create request
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(uri))
+                    .timeout(Duration.of(1, SECONDS))
+                    .GET()
+                    .build();
+
+            //Create HTTP client
+            HttpClient client = HttpClient.newHttpClient();
+
+            //Send the request asynchronously
+            client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .thenAccept(new setStateCallback()); //Callback class to update the field in the object only if the operation succeeds
+
+        } catch (URISyntaxException u) {
+            System.err.println("Error in URI syntax while commanding relay device:");
+            u.printStackTrace();
+        }
     }
 
     //Updates the databasePrimaryKey field and sets the savedInDatabase field to true.
@@ -70,5 +105,24 @@ public class RelayAssociation {
         return databasePrimaryKey;
     }
 
+    //Callback class for receiving the state from the relay
+    private final class setStateCallback implements Consumer<String> {
+        public void accept(String response) {
+            //This method will run as a callback for the asynchronous HTTP request sent in setState()
+            //It will analyse the JSON response and set the `state` field accordingly
+
+            try {
+                //Create JSON object
+                JSONObject jsonObject = new JSONObject(response);
+
+                //Load the 'ison' property and save it into the field
+                state = jsonObject.getBoolean("ison");
+            } catch (JSONException j) {
+                System.err.println("Error in JSON received from relay:");
+                j.printStackTrace();
+            }
+
+        }
+    }
 
 }
