@@ -39,6 +39,7 @@ public class RelayAssociation {
         friendlyName = name;
         networkAddress = addr;
         databasePrimaryKey = primaryKey;
+        savedInDatabase = true;
     }
 
     //Attempts to command the device to change its state to what is provided. Only updates the state value if successful
@@ -74,6 +75,10 @@ public class RelayAssociation {
     public void setDBPrimaryKey(int databasePrimaryKey) {
         this.databasePrimaryKey = databasePrimaryKey;
         savedInDatabase = true;
+    }
+
+    public String toString() {
+        return friendlyName;
     }
 
     //Accessors and mutators

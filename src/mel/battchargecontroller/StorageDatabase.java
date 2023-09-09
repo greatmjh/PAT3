@@ -1,5 +1,8 @@
 package mel.battchargecontroller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -10,7 +13,11 @@ public class StorageDatabase {
     private final Connection jdbcConn;
 
     //Instantiates the object and connects to the SQLite database located at the provided path
-    public StorageDatabase(String path) throws SQLException {
+    public StorageDatabase(String path) throws SQLException, IOException {
+        //Create the directory for the path if it doesn't already exist
+        Files.createDirectories(Paths.get(path).getParent());
+
+
         //JDBC url for SQLite database
         String jdbcUrl = "jdbc:sqlite:" + path;
 
@@ -201,8 +208,14 @@ public class StorageDatabase {
         String query = "DELETE FROM tblRelay WHERE RelayID = ?";
         //Prepare statement
         PreparedStatement pstmt = jdbcConn.prepareStatement(query);
-        //Set primary key value
         pstmt.setInt(1, primaryKey);
         //Execute query
+        pstmt.execute();
+    }
+
+    public void close() {
+        try {
+            jdbcConn.close();
+        } catch (SQLException ignored) {}
     }
 }
