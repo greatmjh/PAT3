@@ -1,20 +1,27 @@
-package mel.battchargecontroller.configui;
-
-import com.formdev.flatlaf.FlatDarculaLaf;
+package mel.battchargecontroller;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class ManagedChargingIntiation extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JComboBox comboBox1;
+    private JComboBox<ChargeController> associationComboBox;
+    private boolean managedChargingEnabled = false;
+    private ChargeController selectedAssociation = null;
 
-    public ManagedChargingIntiation() {
+    public ManagedChargingIntiation(ArrayList<RelayAssociation> associations) {
+        //Build the drop-down
+        for (RelayAssociation ra : associations) {
+            associationComboBox.addItem(ra);
+        }
+        associationComboBox.addItem(new ManualRelay()); //Manual option
+
         setContentPane(contentPane);
-        setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+        setModal(true);
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -28,6 +35,7 @@ public class ManagedChargingIntiation extends JDialog {
             }
         });
 
+
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -36,16 +44,22 @@ public class ManagedChargingIntiation extends JDialog {
             }
         });
 
+
+
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        pack();
+        setTitle("Managed charging initiation");
+        setVisible(true);
     }
 
     private void onOK() {
-        // add your code here
+        managedChargingEnabled = true;
+        selectedAssociation = (ChargeController)associationComboBox.getSelectedItem();
         dispose();
     }
 
@@ -54,12 +68,12 @@ public class ManagedChargingIntiation extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) throws Exception {
-        UIManager.setLookAndFeel(new FlatDarculaLaf());
-        ManagedChargingIntiation dialog = new ManagedChargingIntiation();
-        dialog.pack();
-        dialog.setTitle("Managed charging initiation");
-        dialog.setVisible(true);
-        System.exit(0);
+    public ChargeController getSelectedAssociation() {
+        return selectedAssociation;
     }
+
+    public boolean isManagedChargingEnabled() {
+        return managedChargingEnabled;
+    }
+
 }
