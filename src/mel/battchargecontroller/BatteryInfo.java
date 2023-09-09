@@ -61,32 +61,29 @@ public class BatteryInfo {
                 percentage = Integer.parseInt(stPercentage);
                 //Set percentageAvailable only if this does not throw an exception
                 percentageAvailable = true;
+
             } catch (NumberFormatException n) {
                 //The OS produced invalid data, disregard it
-                System.err.println("Error when parsing result for percentage: " + stPercentage);
-                n.printStackTrace();
                 percentageAvailable = false;
             }
 
             //Get the battery temperature
-            String battTempCmd = ""; //TODO: implement this PowerShell code
+            String battTemperatureCmd = ""; //TODO: implement this PowerShell code
             //Run the command
-            String stTemperature = execPowershell(battTempCmd);
+            String stTemperature = execPowershell(battTemperatureCmd);
             //Attempt to process the output
             try {
                 temperature = Integer.parseInt(stTemperature);
                 //Set temperatureAvailable only if this does not throw an exception
                 temperatureAvailable = true;
             } catch (NumberFormatException n) {
-                System.err.println("Error when parsing result for temperature: " + stTemperature);
-                n.printStackTrace();
                 temperatureAvailable = false;
             }
 
             //Get the charging state
-            String chgStCmd = "(Get-CimInstance -Namespace \"ROOT\\WMI\" -ClassName \"BatteryStatus\").Charging"; //Borrowed from https://github.com/gwblok/garytown/blob/master/hardware/HP/BatteryInfo.ps1
+            String chargingStateCmd = "(Get-CimInstance -Namespace \"ROOT\\WMI\" -ClassName \"BatteryStatus\").Charging"; //Borrowed from https://github.com/gwblok/garytown/blob/master/hardware/HP/BatteryInfo.ps1
             //Run the command
-            String stChargeState = execPowershell(chgStCmd);
+            String stChargeState = execPowershell(chargingStateCmd);
             //Process the output into a boolean
             if (stChargeState.equalsIgnoreCase("True")) {
                 chargingStateAvailable = true;
@@ -97,12 +94,15 @@ public class BatteryInfo {
             } else {
                 //The system produced invalid information
                 chargingStateAvailable = false;
-                System.err.println("System returned invalid response for charging state request: " + stChargeState);
+                //System.err.println("System returned invalid response for charging state request: " + stChargeState);
+            }
+            //Force charging to be true if the battery is at 100%
+            if (percentageAvailable && percentage == 100) {
+                charging = true;
             }
 
         } catch (IOException ex) {
             //An error occurred when running commands
-            ex.printStackTrace();
             percentageAvailable = false;
             temperatureAvailable = false;
             chargingStateAvailable = false;
@@ -110,7 +110,6 @@ public class BatteryInfo {
     }
 
     //Borrowed and adapted from https://stackoverflow.com/questions/5711084/java-runtime-getruntime-getting-output-from-executing-a-command-line-program
-    //Modified to execute powershell commands instead
     private static String execPowershell(String cmd) throws IOException {
         String result = "";
         InputStream inputStream = Runtime.getRuntime().exec("powershell -c " + cmd).getInputStream();
