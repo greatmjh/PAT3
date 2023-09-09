@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 //This class is used to represent and communicate with associated smart relays
-public class RelayAssociation {
+public class RelayAssociation implements ChargeController {
     //Stores the network address of the relay
     private String networkAddress;
 
@@ -43,8 +43,8 @@ public class RelayAssociation {
     }
 
     //Attempts to command the device to change its state to what is provided. Only updates the state value if successful
-    public void setState(boolean state) {
-        String sendState = state ? "on" : "off"; //Set the attribute which will be sent to the relay to either "on" or "off depending on what is required of us
+    public void setState(boolean newState) {
+        String sendState = newState ? "on" : "off"; //Set the attribute which will be sent to the relay to either "on" or "off depending on what is required of us
         String uri = String.format("http://%s/relay/0?turn=%s", networkAddress, sendState); //HTTP uri to command device with
 
         //Send the network request
@@ -98,7 +98,7 @@ public class RelayAssociation {
         this.friendlyName = friendlyName;
     }
 
-    public boolean getState() {
+    public boolean isOn() {
         return state;
     }
 
