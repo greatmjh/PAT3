@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.Objects;
 
 public class StorageDatabaseTest {
@@ -136,10 +135,10 @@ public class StorageDatabaseTest {
         System.out.println("Running loadUserCfg on an empty database");
         try {
             UserConfigUnit emptyDbCfg = testDB1.loadUserCfg();
-            if (emptyDbCfg.isLimitByPercentage() == UserConfigUnit.DEFAULT_LIMIT_BY_PERCENTAGE &&
-                    emptyDbCfg.isLimitByTemperature() == UserConfigUnit.DEFAULT_LIMIT_BY_TEMPERATURE &&
-                    emptyDbCfg.getMaxBattPercentage() == UserConfigUnit.DEFAULT_MAXIMUM_PERCENTAGE &&
-                    emptyDbCfg.getMaxBattTemp() == UserConfigUnit.DEFAULT_MAXIMUM_TEMPERATURE) {
+            if (emptyDbCfg.isLimitedByPercentage() == UserConfigUnit.DEFAULT_LIMIT_BY_PERCENTAGE &&
+                    emptyDbCfg.isLimitedByTemperature() == UserConfigUnit.DEFAULT_LIMIT_BY_TEMPERATURE &&
+                    emptyDbCfg.getMaxBatteryPercentage() == UserConfigUnit.DEFAULT_MAXIMUM_PERCENTAGE &&
+                    emptyDbCfg.getMaxBatteryTemperature() == UserConfigUnit.DEFAULT_MAXIMUM_TEMPERATURE) {
                 System.out.println("PASS: Default values are present");
             } else {
                 System.out.println("FAIL: Default values are not present");
@@ -168,10 +167,10 @@ public class StorageDatabaseTest {
         //=============Test of loadUserCfg() with known data=============
         try {
             UserConfigUnit postSaveTestConfig = testDB1.loadUserCfg();
-            if (postSaveTestConfig.isLimitByPercentage() == TEST_LIMIT_BY_PERCENTAGE &&
-                    postSaveTestConfig.isLimitByTemperature() == TEST_LIMIT_BY_TEMPERATURE &&
-                    postSaveTestConfig.getMaxBattPercentage() == TEST_MAXIMUM_PERCENTAGE &&
-                    postSaveTestConfig.getMaxBattTemp() == TEST_MAXIMUM_TEMPERATURE) {
+            if (postSaveTestConfig.isLimitedByPercentage() == TEST_LIMIT_BY_PERCENTAGE &&
+                    postSaveTestConfig.isLimitedByTemperature() == TEST_LIMIT_BY_TEMPERATURE &&
+                    postSaveTestConfig.getMaxBatteryPercentage() == TEST_MAXIMUM_PERCENTAGE &&
+                    postSaveTestConfig.getMaxBatteryTemperature() == TEST_MAXIMUM_TEMPERATURE) {
                 System.out.println("PASS: Correct values are present");
             } else {
                 System.out.println("FAIL: Correct values are not present");

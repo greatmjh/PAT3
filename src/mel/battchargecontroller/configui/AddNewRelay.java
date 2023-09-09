@@ -13,6 +13,7 @@ public class AddNewRelay extends JDialog {
 
     public AddNewRelay(ConfigWindow parent) {
         this.parent = parent;
+
         setTitle("Add new relay");
         setContentPane(contentPane);
         pack();
@@ -54,7 +55,6 @@ public class AddNewRelay extends JDialog {
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 }

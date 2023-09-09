@@ -14,29 +14,29 @@ public class UserConfigUnit {
     //Default configuration value for maxBattPercentage
     public static final int DEFAULT_MAXIMUM_PERCENTAGE = 80;
 
-    //Whether or not the program should limit charging by battery temperature
+    //Whether the program should limit charging by battery temperature
     private boolean limitByTemperature;
 
     //User specified maximum battery temperature (Celsius)
-    private int maxBattTemp;
+    private int maxBatteryTemperature;
 
     //Whether or not the program should limit charging by battery percentage
     private boolean limitByPercentage;
 
     //User specified maximum battery percentage
-    private int maxBattPercentage;
+    private int maxBatteryPercentage;
 
     //Constructor
-    public UserConfigUnit(boolean limitByTemperature, int maxBattTemp, boolean limitByPercentage, int maxBattPercentage) {
+    public UserConfigUnit(boolean limitByTemperature, int maxBatteryTemperature, boolean limitByPercentage, int maxBatteryPercentage) {
         this.limitByTemperature = limitByTemperature;
-        this.maxBattTemp = maxBattTemp;
+        this.maxBatteryTemperature = maxBatteryTemperature;
         this.limitByPercentage = limitByPercentage;
-        this.maxBattPercentage = maxBattPercentage;
+        this.maxBatteryPercentage = maxBatteryPercentage;
     }
 
     //Accessors and mutators
 
-    public boolean isLimitByTemperature() {
+    public boolean isLimitedByTemperature() {
         return limitByTemperature;
     }
 
@@ -44,15 +44,15 @@ public class UserConfigUnit {
         this.limitByTemperature = limitByTemperature;
     }
 
-    public int getMaxBattTemp() {
-        return maxBattTemp;
+    public int getMaxBatteryTemperature() {
+        return maxBatteryTemperature;
     }
 
-    public void setMaxBattTemp(int maxBattTemp) {
-        this.maxBattTemp = maxBattTemp;
+    public void setMaxBatteryTemperature(int maxBatteryTemperature) {
+        this.maxBatteryTemperature = maxBatteryTemperature;
     }
 
-    public boolean isLimitByPercentage() {
+    public boolean isLimitedByPercentage() {
         return limitByPercentage;
     }
 
@@ -60,11 +60,11 @@ public class UserConfigUnit {
         this.limitByPercentage = limitByPercentage;
     }
 
-    public int getMaxBattPercentage() {
-        return maxBattPercentage;
+    public int getMaxBatteryPercentage() {
+        return maxBatteryPercentage;
     }
 
-    public void setMaxBattPercentage(int maxBattPercentage) {
-        this.maxBattPercentage = maxBattPercentage;
+    public void setMaxBatteryPercentage(int maxBatteryPercentage) {
+        this.maxBatteryPercentage = maxBatteryPercentage;
     }
 }

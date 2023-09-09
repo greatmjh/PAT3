@@ -5,22 +5,22 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class BatteryInfo {
-    //Does the system support battery percentage reporting
+    //Stores whether the system support battery percentage reporting
     private static boolean percentageAvailable = false;
 
-    //Battery percentage
+    //Stores the battery percentage
     private static int percentage = 0;
 
-    //Does the system support battery temperature reporting
+    //Stores whether the system support battery temperature reporting
     private static boolean temperatureAvailable = false;
 
-    //Battery temperature in Celsius
+    //Stores battery temperature in Celsius
     private static int temperature = 0;
 
-    //Does the system report whether the device is charging
+    //Stores whether the system can report whether the device is charging
     private static boolean chargingStateAvailable = false;
 
-    //Is the system charging
+    //Stores whether the system is charging
     private static boolean charging = false;
 
     //Accessors
@@ -53,9 +53,9 @@ public class BatteryInfo {
         Runtime rt = Runtime.getRuntime();
         try {
             //Get the battery percentage
-            String battPercentageCmd = "Get-CimInstance -ClassName Win32_Battery | Select-Object -ExpandProperty EstimatedChargeRemaining"; //Borrowed from https://powershell.one/wmi/root/cimv2/win32_battery
+            String batteryPercentageCmd = "Get-CimInstance -ClassName Win32_Battery | Select-Object -ExpandProperty EstimatedChargeRemaining"; //Borrowed from https://powershell.one/wmi/root/cimv2/win32_battery
             //Run the command
-            String stPercentage = execPowershell(battPercentageCmd);
+            String stPercentage = execPowershell(batteryPercentageCmd);
             //Attempt to process the output
             try {
                 percentage = Integer.parseInt(stPercentage);
@@ -68,9 +68,9 @@ public class BatteryInfo {
             }
 
             //Get the battery temperature
-            String battTemperatureCmd = ""; //TODO: implement this PowerShell code
+            String batteryTemperatureCmd = ""; //TODO: implement this PowerShell code
             //Run the command
-            String stTemperature = execPowershell(battTemperatureCmd);
+            String stTemperature = execPowershell(batteryTemperatureCmd);
             //Attempt to process the output
             try {
                 temperature = Integer.parseInt(stTemperature);
@@ -83,18 +83,18 @@ public class BatteryInfo {
             //Get the charging state
             String chargingStateCmd = "(Get-CimInstance -Namespace \"ROOT\\WMI\" -ClassName \"BatteryStatus\").Charging"; //Borrowed from https://github.com/gwblok/garytown/blob/master/hardware/HP/BatteryInfo.ps1
             //Run the command
-            String stChargeState = execPowershell(chargingStateCmd);
+            String stChargingState = execPowershell(chargingStateCmd);
             //Process the output into a boolean
-            if (stChargeState.equalsIgnoreCase("True")) {
+            if (stChargingState.equalsIgnoreCase("True")) {
                 chargingStateAvailable = true;
                 charging = true;
-            } else if (stChargeState.equalsIgnoreCase("False")) {
+            } else if (stChargingState.equalsIgnoreCase("False")) {
                 chargingStateAvailable = true;
                 charging = false;
             } else {
                 //The system produced invalid information
                 chargingStateAvailable = false;
-                //System.err.println("System returned invalid response for charging state request: " + stChargeState);
+                //System.err.println("System returned invalid response for charging state request: " + stChargingState);
             }
             //Force charging to be true if the battery is at 100%
             if (percentageAvailable && percentage == 100) {

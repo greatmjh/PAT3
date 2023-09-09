@@ -65,8 +65,7 @@ public class RelayAssociation implements ChargeController {
                     .thenAccept(new setStateCallback()); //Callback class to update the field in the object only if the operation succeeds
 
         } catch (URISyntaxException u) {
-            System.err.println("Error in URI syntax while commanding relay device:");
-            u.printStackTrace();
+            System.err.println("Error in URI syntax while commanding relay device");
         }
     }
 
@@ -123,8 +122,7 @@ public class RelayAssociation implements ChargeController {
                 //Load the 'ison' property and save it into the field
                 state = jsonObject.getBoolean("ison");
             } catch (JSONException j) {
-                System.err.println("Error in JSON received from relay:");
-                j.printStackTrace();
+                System.err.println("Error in JSON received from relay.");
             }
 
         }

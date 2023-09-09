@@ -17,7 +17,6 @@ public class StorageDatabase {
         //Create the directory for the path if it doesn't already exist
         Files.createDirectories(Paths.get(path).getParent());
 
-
         //JDBC url for SQLite database
         String jdbcUrl = "jdbc:sqlite:" + path;
 
@@ -50,7 +49,7 @@ public class StorageDatabase {
 
     //Loads the user’s configuration from the database
     public UserConfigUnit loadUserCfg() throws SQLException {
-        //SQL query to be ran
+        //SQL query to be run
         String query = "SELECT FieldName, FieldValue " +
                 "FROM tblConfig;";
 
@@ -105,22 +104,22 @@ public class StorageDatabase {
 
         //Save LimitByTemperature
         pstmt.setString(2, "LimitByTemperature");
-        pstmt.setString(1, String.valueOf(cfg.isLimitByTemperature()));
+        pstmt.setString(1, String.valueOf(cfg.isLimitedByTemperature()));
         pstmt.addBatch();
 
         //Save MaxBattTemp
         pstmt.setString(2, "MaxBattTemp");
-        pstmt.setString(1, String.valueOf(cfg.getMaxBattTemp()));
+        pstmt.setString(1, String.valueOf(cfg.getMaxBatteryTemperature()));
         pstmt.addBatch();
 
         //Save LimitByPercentage
         pstmt.setString(2, "LimitByPercentage");
-        pstmt.setString(1, String.valueOf(cfg.isLimitByPercentage()));
+        pstmt.setString(1, String.valueOf(cfg.isLimitedByPercentage()));
         pstmt.addBatch();
 
         //Save MaxBattPercentage
         pstmt.setString(2, "MaxBattPercentage");
-        pstmt.setString(1, String.valueOf(cfg.getMaxBattPercentage()));
+        pstmt.setString(1, String.valueOf(cfg.getMaxBatteryPercentage()));
         pstmt.addBatch();
 
         //Execute the query

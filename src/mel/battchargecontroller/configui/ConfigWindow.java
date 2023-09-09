@@ -9,11 +9,19 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ConfigWindow {
+    public static void main(String[] args) throws Exception{
+        UIManager.setLookAndFeel(new FlatDarculaLaf());
+        frame = new JFrame("Configuration");
+        frame.setContentPane(new ConfigWindow().panel1);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
     public ConfigWindow() {
         //Connect to and load from the database
         try {
@@ -47,10 +55,10 @@ public class ConfigWindow {
         }
 
         //Display the user configuration
-        limitByPercentageCheckBox.setSelected(loadedConfig.isLimitByPercentage());
-        limitByTemperatureCheckBox.setSelected(loadedConfig.isLimitByTemperature());
-        percentageSlider.setValue(loadedConfig.getMaxBattPercentage());
-        temperatureSlider.setValue(loadedConfig.getMaxBattTemp());
+        limitByPercentageCheckBox.setSelected(loadedConfig.isLimitedByPercentage());
+        limitByTemperatureCheckBox.setSelected(loadedConfig.isLimitedByTemperature());
+        percentageSlider.setValue(loadedConfig.getMaxBatteryPercentage());
+        temperatureSlider.setValue(loadedConfig.getMaxBatteryTemperature());
 
         //Display the relay associations
         relayList.setListData(relayAssociations.toArray(new RelayAssociation[0]));
@@ -93,18 +101,8 @@ public class ConfigWindow {
         });
     }
 
-    public static void main(String[] args) throws Exception{
-        UIManager.setLookAndFeel(new FlatDarculaLaf());
-        frame = new JFrame("Configuration");
-        frame.setContentPane(new ConfigWindow().panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-    }
-
     private UserConfigUnit loadedConfig;
     private ArrayList<RelayAssociation> relayAssociations;
-
     private ArrayList<RelayAssociation> deletedRelayAssociations = new ArrayList<>();
 
 
@@ -124,6 +122,10 @@ public class ConfigWindow {
 
     //To be called by the AddNewRelay dialog to add the relay association into the system
     public void addRelay(String name, String addr) {
+        //Check if a friendly name has been specified, and revert to a default name if necessary
+        if (name.isEmpty()) {
+            name = "Relay";
+        }
         //Check if the address is a valid IP address
         boolean isValidIP = InetAddressValidator.getInstance().isValid(addr);
         //Check if the address is a valid DNS name
@@ -141,8 +143,8 @@ public class ConfigWindow {
     private void updateLoadedConfig() {
         loadedConfig.setLimitByPercentage(limitByPercentageCheckBox.isSelected());
         loadedConfig.setLimitByTemperature(limitByTemperatureCheckBox.isSelected());
-        loadedConfig.setMaxBattPercentage(percentageSlider.getValue());
-        loadedConfig.setMaxBattTemp(temperatureSlider.getValue());
+        loadedConfig.setMaxBatteryPercentage(percentageSlider.getValue());
+        loadedConfig.setMaxBatteryTemperature(temperatureSlider.getValue());
     }
 
     private boolean syncWithDB() {
@@ -162,7 +164,7 @@ public class ConfigWindow {
                 }
             }
             deletedRelayAssociations = new ArrayList<>();
-            //Reload all relay associations to ensure that they have the appropriate savedInDB value
+            //Reload all the relay list
             relayList.setListData(relayAssociations.toArray(new RelayAssociation[0]));
             sdb.close();
         } catch (SQLException | IOException e) {
@@ -179,7 +181,6 @@ public class ConfigWindow {
     private JPanel panel1;
     private JCheckBox limitByPercentageCheckBox;
     private JCheckBox limitByTemperatureCheckBox;
-    private JLabel endDegree;
     private JList<RelayAssociation> relayList;
     private JButton addNewRelayButton;
     private JButton deleteRelayButton;
@@ -188,7 +189,6 @@ public class ConfigWindow {
     private JButton cancelButton;
     private JSlider percentageSlider;
     private JSlider temperatureSlider;
-    private JLabel beginDegree;
     private JLabel percentageUnsupportedLabel;
     private JLabel temperatureUnsupportedLabel;
 

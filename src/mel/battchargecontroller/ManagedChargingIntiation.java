@@ -17,7 +17,7 @@ public class ManagedChargingIntiation extends JDialog {
         for (RelayAssociation ra : associations) {
             associationComboBox.addItem(ra);
         }
-        associationComboBox.addItem(new ManualRelay()); //Manual option
+        associationComboBox.addItem(new ManualManagedCharger()); //Manual option
 
         setContentPane(contentPane);
         getRootPane().setDefaultButton(buttonOK);
