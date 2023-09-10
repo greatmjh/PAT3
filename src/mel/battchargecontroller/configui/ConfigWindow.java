@@ -43,11 +43,6 @@ public class ConfigWindow {
         }
         //Gray out sliders for options that are unavailable
         BatteryInfo.update();
-        if (!BatteryInfo.isTemperatureAvailable()) {
-            limitByTemperatureCheckBox.setEnabled(false);
-            temperatureSlider.setEnabled(false);
-            temperatureUnsupportedLabel.setVisible(true);
-        }
         if (!BatteryInfo.isPercentageAvailable()) {
             limitByPercentageCheckBox.setEnabled(false);
             percentageSlider.setEnabled(false);
@@ -56,9 +51,7 @@ public class ConfigWindow {
 
         //Display the user configuration
         limitByPercentageCheckBox.setSelected(loadedConfig.isLimitedByPercentage());
-        limitByTemperatureCheckBox.setSelected(loadedConfig.isLimitedByTemperature());
         percentageSlider.setValue(loadedConfig.getMaxBatteryPercentage());
-        temperatureSlider.setValue(loadedConfig.getMaxBatteryTemperature());
 
         //Display the relay associations
         relayList.setListData(relayAssociations.toArray(new RelayAssociation[0]));
@@ -142,9 +135,7 @@ public class ConfigWindow {
 
     private void updateLoadedConfig() {
         loadedConfig.setLimitByPercentage(limitByPercentageCheckBox.isSelected());
-        loadedConfig.setLimitByTemperature(limitByTemperatureCheckBox.isSelected());
         loadedConfig.setMaxBatteryPercentage(percentageSlider.getValue());
-        loadedConfig.setMaxBatteryTemperature(temperatureSlider.getValue());
     }
 
     private boolean syncWithDB() {
@@ -180,7 +171,6 @@ public class ConfigWindow {
     private JTabbedPane tabs;
     private JPanel panel1;
     private JCheckBox limitByPercentageCheckBox;
-    private JCheckBox limitByTemperatureCheckBox;
     private JList<RelayAssociation> relayList;
     private JButton addNewRelayButton;
     private JButton deleteRelayButton;
@@ -188,8 +178,6 @@ public class ConfigWindow {
     private JButton applyButton;
     private JButton cancelButton;
     private JSlider percentageSlider;
-    private JSlider temperatureSlider;
     private JLabel percentageUnsupportedLabel;
-    private JLabel temperatureUnsupportedLabel;
 
 }

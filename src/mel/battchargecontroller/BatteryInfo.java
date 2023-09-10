@@ -11,12 +11,6 @@ public class BatteryInfo {
     //Stores the battery percentage
     private static int percentage = 0;
 
-    //Stores whether the system support battery temperature reporting
-    private static boolean temperatureAvailable = false;
-
-    //Stores battery temperature in Celsius
-    private static int temperature = 0;
-
     //Stores whether the system can report whether the device is charging
     private static boolean chargingStateAvailable = false;
 
@@ -30,14 +24,6 @@ public class BatteryInfo {
 
     public static int getPercentage() {
         return percentage;
-    }
-
-    public static boolean isTemperatureAvailable() {
-        return temperatureAvailable;
-    }
-
-    public static int getTemperature() {
-        return temperature;
     }
 
     public static boolean isChargingStateAvailable() {
@@ -67,19 +53,6 @@ public class BatteryInfo {
                 percentageAvailable = false;
             }
 
-            //Get the battery temperature
-            String batteryTemperatureCmd = ""; //TODO: implement this PowerShell code
-            //Run the command
-            String stTemperature = execPowershell(batteryTemperatureCmd);
-            //Attempt to process the output
-            try {
-                temperature = Integer.parseInt(stTemperature);
-                //Set temperatureAvailable only if this does not throw an exception
-                temperatureAvailable = true;
-            } catch (NumberFormatException n) {
-                temperatureAvailable = false;
-            }
-
             //Get the charging state
             String chargingStateCmd = "(Get-CimInstance -Namespace \"ROOT\\WMI\" -ClassName \"BatteryStatus\").Charging"; //Borrowed from https://github.com/gwblok/garytown/blob/master/hardware/HP/BatteryInfo.ps1
             //Run the command
@@ -104,7 +77,6 @@ public class BatteryInfo {
         } catch (IOException ex) {
             //An error occurred when running commands
             percentageAvailable = false;
-            temperatureAvailable = false;
             chargingStateAvailable = false;
         }
     }

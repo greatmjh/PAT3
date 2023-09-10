@@ -59,10 +59,7 @@ public class MainBackgroundService {
             boolean percentageLimitExceeded = BatteryInfo.isPercentageAvailable() && userConfig.isLimitedByPercentage()
                     && BatteryInfo.getPercentage() > userConfig.getMaxBatteryPercentage();
 
-            boolean temperatureLimitExceeded = BatteryInfo.isTemperatureAvailable() && userConfig.isLimitedByTemperature()
-                    && BatteryInfo.getTemperature() > userConfig.getMaxBatteryTemperature();
-
-            chargeController.setState(!(percentageLimitExceeded || temperatureLimitExceeded)); //Turn the relay off if either temperature or percentage limits are reached
+            chargeController.setState(!percentageLimitExceeded); //Turn the relay off if either temperature or percentage limits are reached
             sleep(1); //Give time for the state to change
             BatteryInfo.update();
         } while (BatteryInfo.isCharging() || !chargeController.isOn()); //Stay in the managed state while the system is either charging, or supposed to be paused

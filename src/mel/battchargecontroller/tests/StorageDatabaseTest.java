@@ -136,9 +136,7 @@ public class StorageDatabaseTest {
         try {
             UserConfigUnit emptyDbCfg = testDB1.loadUserCfg();
             if (emptyDbCfg.isLimitedByPercentage() == UserConfigUnit.DEFAULT_LIMIT_BY_PERCENTAGE &&
-                    emptyDbCfg.isLimitedByTemperature() == UserConfigUnit.DEFAULT_LIMIT_BY_TEMPERATURE &&
-                    emptyDbCfg.getMaxBatteryPercentage() == UserConfigUnit.DEFAULT_MAXIMUM_PERCENTAGE &&
-                    emptyDbCfg.getMaxBatteryTemperature() == UserConfigUnit.DEFAULT_MAXIMUM_TEMPERATURE) {
+                    emptyDbCfg.getMaxBatteryPercentage() == UserConfigUnit.DEFAULT_MAXIMUM_PERCENTAGE){
                 System.out.println("PASS: Default values are present");
             } else {
                 System.out.println("FAIL: Default values are not present");
@@ -153,7 +151,7 @@ public class StorageDatabaseTest {
 
         //=============Test of saveUserCfg()=============
         System.out.println("Testing saveUserCfg() method");
-        UserConfigUnit preSaveTestConfig = new UserConfigUnit(TEST_LIMIT_BY_TEMPERATURE, TEST_MAXIMUM_TEMPERATURE, TEST_LIMIT_BY_PERCENTAGE, TEST_MAXIMUM_PERCENTAGE);
+        UserConfigUnit preSaveTestConfig = new UserConfigUnit(TEST_LIMIT_BY_PERCENTAGE, TEST_MAXIMUM_PERCENTAGE);
         try {
             testDB1.saveUserCfg(preSaveTestConfig);
             System.out.println("PASS: saveUserCfg() succeeded");
@@ -168,9 +166,7 @@ public class StorageDatabaseTest {
         try {
             UserConfigUnit postSaveTestConfig = testDB1.loadUserCfg();
             if (postSaveTestConfig.isLimitedByPercentage() == TEST_LIMIT_BY_PERCENTAGE &&
-                    postSaveTestConfig.isLimitedByTemperature() == TEST_LIMIT_BY_TEMPERATURE &&
-                    postSaveTestConfig.getMaxBatteryPercentage() == TEST_MAXIMUM_PERCENTAGE &&
-                    postSaveTestConfig.getMaxBatteryTemperature() == TEST_MAXIMUM_TEMPERATURE) {
+                    postSaveTestConfig.getMaxBatteryPercentage() == TEST_MAXIMUM_PERCENTAGE) {
                 System.out.println("PASS: Correct values are present");
             } else {
                 System.out.println("FAIL: Correct values are not present");

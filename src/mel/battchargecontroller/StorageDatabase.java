@@ -32,8 +32,6 @@ public class StorageDatabase {
                 "FieldName TEXT UNIQUE NOT NULL," +
                 "FieldValue TEXT);";
         String configTablePopulation = "INSERT OR IGNORE INTO tblConfig(FieldName) VALUES" +
-                "(\"LimitByTemperature\")," +
-                "(\"MaxBattTemp\")," +
                 "(\"LimitByPercentage\")," +
                 "(\"MaxBattPercentage\")";
         String relayTableBlueprint = "CREATE TABLE IF NOT EXISTS tblRelay(" +
@@ -58,8 +56,6 @@ public class StorageDatabase {
         ResultSet rs = stmt.executeQuery(query);
 
         //Load default values in case the database has these fields stored as NULL
-        boolean limitByTemperature = UserConfigUnit.DEFAULT_LIMIT_BY_TEMPERATURE;
-        int maxBattTemp = UserConfigUnit.DEFAULT_MAXIMUM_TEMPERATURE;
         boolean limitByPercentage = UserConfigUnit.DEFAULT_LIMIT_BY_PERCENTAGE;
         int maxBattPercentage = UserConfigUnit.DEFAULT_MAXIMUM_PERCENTAGE;
 
@@ -76,12 +72,6 @@ public class StorageDatabase {
             //Determine which field this row is for and populate it
             try {
                 switch (field) {
-                    case "LimitByTemperature":
-                        limitByTemperature = Boolean.parseBoolean(value);
-                        break;
-                    case "MaxBattTemp":
-                        maxBattTemp = Integer.parseInt(value);
-                        break;
                     case "LimitByPercentage":
                         limitByPercentage = Boolean.parseBoolean(value);
                         break;
@@ -92,7 +82,7 @@ public class StorageDatabase {
             } catch (NumberFormatException ignored) {}; //If there is something wrong with the data, the default must be used
         }
 
-        return new UserConfigUnit(limitByTemperature, maxBattTemp, limitByPercentage, maxBattPercentage);
+        return new UserConfigUnit(limitByPercentage, maxBattPercentage);
     }
 
     //Saves the provided configuration into the database, overwriting the existing content
@@ -101,16 +91,6 @@ public class StorageDatabase {
         String query = "UPDATE tblConfig SET FieldValue = ? WHERE FieldName = ?;";
         //Create prepared statement based on query template
         PreparedStatement pstmt = jdbcConn.prepareStatement(query);
-
-        //Save LimitByTemperature
-        pstmt.setString(2, "LimitByTemperature");
-        pstmt.setString(1, String.valueOf(cfg.isLimitedByTemperature()));
-        pstmt.addBatch();
-
-        //Save MaxBattTemp
-        pstmt.setString(2, "MaxBattTemp");
-        pstmt.setString(1, String.valueOf(cfg.getMaxBatteryTemperature()));
-        pstmt.addBatch();
 
         //Save LimitByPercentage
         pstmt.setString(2, "LimitByPercentage");
