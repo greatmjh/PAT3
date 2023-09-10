@@ -6,8 +6,14 @@ import org.apache.commons.validator.routines.DomainValidator;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.MouseAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -52,6 +58,7 @@ public class ConfigWindow {
         //Display the user configuration
         limitByPercentageCheckBox.setSelected(loadedConfig.isLimitedByPercentage());
         percentageSlider.setValue(loadedConfig.getMaxBatteryPercentage());
+        currentPercentage.setText(percentageSlider.getValue() + "%");
 
         //Display the relay associations
         relayList.setListData(relayAssociations.toArray(new RelayAssociation[0]));
@@ -90,6 +97,18 @@ public class ConfigWindow {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
                 System.exit(0);
+            }
+        });
+        percentageSlider.addComponentListener(new ComponentAdapter() {
+        });
+        percentageSlider.addComponentListener(new ComponentAdapter() {
+        });
+        percentageSlider.addMouseListener(new MouseAdapter() {
+        });
+        percentageSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                currentPercentage.setText(percentageSlider.getValue() + "%");
             }
         });
     }
@@ -179,5 +198,6 @@ public class ConfigWindow {
     private JButton cancelButton;
     private JSlider percentageSlider;
     private JLabel percentageUnsupportedLabel;
+    private JLabel currentPercentage;
 
 }
