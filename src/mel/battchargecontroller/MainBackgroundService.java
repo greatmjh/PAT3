@@ -55,13 +55,12 @@ public class MainBackgroundService {
     private static void managedState(ChargeController chargeController, UserConfigUnit userConfig) {
         BatteryInfo.update();
         do {
-            sleep(MANAGED_TIME_DELAY); //Avoid short cycling
             boolean percentageLimitExceeded = BatteryInfo.isPercentageAvailable() && userConfig.isLimitedByPercentage()
                     && BatteryInfo.getPercentage() > userConfig.getMaxBatteryPercentage();
 
             chargeController.setState(!percentageLimitExceeded); //Turn the relay off if either temperature or percentage limits are reached
-            sleep(1); //Give time for the state to change
             BatteryInfo.update();
+            sleep(MANAGED_TIME_DELAY); //Avoid short cycling
         } while (BatteryInfo.isCharging() || !chargeController.isOn()); //Stay in the managed state while the system is either charging, or supposed to be paused
 
     }

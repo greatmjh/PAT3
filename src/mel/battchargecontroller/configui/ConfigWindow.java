@@ -8,10 +8,7 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.MouseAdapter;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -99,18 +96,28 @@ public class ConfigWindow {
                 System.exit(0);
             }
         });
-        percentageSlider.addComponentListener(new ComponentAdapter() {
-        });
-        percentageSlider.addComponentListener(new ComponentAdapter() {
-        });
-        percentageSlider.addMouseListener(new MouseAdapter() {
-        });
         percentageSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 currentPercentage.setText(percentageSlider.getValue() + "%");
             }
         });
+
+        //F1 binding
+        AbstractAction f1Action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Runtime.getRuntime().exec(String.format("cmd.exe /c start %s\\user_manual.htm", System.getProperty("user.dir"))); //Opens the help document in the user's preferred browser
+                } catch (IOException i) {
+                    System.err.println("Unable to launch help document.");
+                    i.printStackTrace();
+                }
+            }
+        };
+        KeyStroke f1Stroke = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
+        panel1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(f1Stroke, "F1Pressed");
+        panel1.getActionMap().put("F1Pressed", f1Action);
     }
 
     private UserConfigUnit loadedConfig;

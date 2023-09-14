@@ -14,9 +14,6 @@ public class StorageDatabase {
 
     //Instantiates the object and connects to the SQLite database located at the provided path
     public StorageDatabase(String path) throws SQLException, IOException {
-        //Create the directory for the path if it doesn't already exist
-        Files.createDirectories(Paths.get(path).getParent());
-
         //JDBC url for SQLite database
         String jdbcUrl = "jdbc:sqlite:" + path;
 

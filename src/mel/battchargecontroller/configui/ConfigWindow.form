@@ -32,6 +32,7 @@
                 <properties>
                   <selected value="false"/>
                   <text value="Limit by percentage"/>
+                  <toolTipText value="If this checkbox is enabled, the system will stop charging at the specified percentage and maintain that battery percentage until the charger is unplugged"/>
                 </properties>
               </component>
               <grid id="db65d" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -64,6 +65,7 @@
                     </constraints>
                     <properties>
                       <extent value="0"/>
+                      <toolTipText value="Specifies the maximum percentage which the software will allow the battery to be charged to, if the checkbox is ticked"/>
                       <value value="80"/>
                     </properties>
                   </component>
@@ -120,6 +122,7 @@
                     </constraints>
                     <properties>
                       <text value="Add new relay"/>
+                      <toolTipText value="Connects a new relay unit to the program so that it can be used to control charging"/>
                     </properties>
                   </component>
                   <component id="c6378" class="javax.swing.JButton" binding="deleteRelayButton" default-binding="true">
@@ -128,6 +131,7 @@
                     </constraints>
                     <properties>
                       <text value="Delete relay"/>
+                      <toolTipText value="Disconnects the selected relay from the application"/>
                     </properties>
                   </component>
                 </children>
